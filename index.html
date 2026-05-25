@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0055)file:///Users/tashiromuneo/Downloads/tour-split_11.html -->
+<!-- saved from url=(0055)file:///Users/tashiromuneo/Downloads/tour-split_14.html -->
 <html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -197,6 +197,34 @@
   .add-member-row input { flex: 1; }
   .btn-add-confirm { padding: 10px 16px; background: var(--sage); color: var(--white); border: none; border-radius: 9px; font-size: 0.86rem; font-weight: 700; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; white-space: nowrap; transition: all 0.15s; }
   .btn-add-confirm:hover { background: var(--moss); }
+
+
+  /* 精算カード内の立替明細 */
+  .expense-breakdown { margin: 4px 0 6px 0; border-left: 2px solid var(--sand); padding-left: 10px; display: flex; flex-direction: column; gap: 3px; }
+  .expense-breakdown-item { display: flex; justify-content: space-between; align-items: center; font-size: 0.78rem; color: var(--stone); }
+  .expense-breakdown-item .b-name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 8px; }
+  .expense-breakdown-item .b-amt { font-family: 'Syne', sans-serif; font-size: 0.8rem; color: var(--earth); flex-shrink: 0; }
+
+  /* 参照モード：更新日時バッジ */
+  .view-updated-badge { text-align: center; font-size: 0.78rem; color: var(--stone); background: var(--white); border: 1px solid var(--sand); border-radius: 8px; padding: 7px 14px; margin-bottom: 14px; }
+  .view-updated-badge strong { color: var(--earth); }
+  /* 参照モード */
+  .view-mode-banner { background: var(--moss); color: var(--white); text-align: center; padding: 10px 16px; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.03em; }
+  .view-mode-banner strong { color: var(--accent2); }
+  #view-screen { display: none; }
+  .view-section { background: var(--white); border-radius: 15px; padding: 18px 16px; border: 1.5px solid var(--sand); margin-bottom: 12px; }
+  .view-section-title { font-family: 'Syne', sans-serif; font-size: 0.95rem; font-weight: 700; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--sand); }
+  .view-tabs { display: flex; gap: 3px; background: var(--sand); padding: 4px; border-radius: 12px; margin-bottom: 16px; }
+  .view-tab { flex: 1; padding: 8px 4px; border: none; border-radius: 9px; background: none; font-size: 0.78rem; font-weight: 600; color: var(--stone); cursor: pointer; transition: all 0.2s; font-family: 'Noto Sans JP', sans-serif; }
+  .view-tab.active { background: var(--white); color: var(--earth); box-shadow: 0 2px 8px rgba(44,36,22,0.1); }
+  .view-tab-content { display: none; }
+  .view-tab-content.active { display: block; }
+
+  /* 参照URLモーダル */
+  .share-url-box { background: var(--cream); border: 1.5px solid var(--sand); border-radius: 10px; padding: 12px 14px; font-size: 0.78rem; color: var(--earth); word-break: break-all; line-height: 1.6; margin: 10px 0; max-height: 100px; overflow-y: auto; }
+  .btn-copy { width: 100%; padding: 12px; background: var(--moss); color: var(--white); border: none; border-radius: 10px; font-size: 0.92rem; font-weight: 700; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; transition: all 0.2s; margin-top: 8px; }
+  .btn-copy:hover { background: var(--earth); }
+  .copy-note { font-size: 0.75rem; color: var(--stone); margin-top: 8px; text-align: center; line-height: 1.5; }
   @media (max-width: 560px) {
     .summary-bar { grid-template-columns: 1fr 1fr; }
     .form-row { grid-template-columns: 1fr; }
@@ -296,27 +324,27 @@
     <div class="summary-bar">
       <div class="summary-card">
         <div class="summary-label">立替合計</div>
-        <div class="summary-value" id="total-amount">€2,418</div>
+        <div class="summary-value" id="total-amount">€3,418</div>
       </div>
       <div class="summary-card">
         <div class="summary-label">手数料込み/人</div>
-        <div class="summary-value accent" id="per-person">€508</div>
+        <div class="summary-value accent" id="per-person">€718</div>
       </div>
       <div class="summary-card">
         <div class="summary-label">件数</div>
-        <div class="summary-value green" id="expense-count">7件</div>
+        <div class="summary-value green" id="expense-count">8件</div>
       </div>
     </div>
 
     <div class="tabs">
-      <button class="tab active" onclick="switchTab(&#39;expenses&#39;)">立替入力</button>
+      <button class="tab" onclick="switchTab(&#39;expenses&#39;)">立替入力</button>
       <button class="tab" onclick="switchTab(&#39;list&#39;)">履歴</button>
       <button class="tab" onclick="switchTab(&#39;settlement&#39;)">精算</button>
-      <button class="tab" onclick="switchTab(&#39;members&#39;)">メンバー</button>
+      <button class="tab active" onclick="switchTab(&#39;members&#39;)">メンバー</button>
     </div>
 
     <!-- 立替入力 -->
-    <div class="tab-content active" id="tab-expenses">
+    <div class="tab-content" id="tab-expenses">
       <div class="expense-form">
         <div class="form-title">💳 立替を記録する（案内人操作）</div>
         <label>内容・用途</label>
@@ -371,27 +399,182 @@
         <button class="btn-csv" onclick="exportHistoryCSV()">📥 立替履歴をCSV出力</button>
       </div>
       <div class="expense-list" id="expense-list-container">
-        <div class="empty-state"><div class="icon">📋</div>まだ立替が記録されていません</div>
+    <div class="expense-item">
+      <div class="expense-icon">🍽️</div>
+      <div class="expense-info">
+        <div class="expense-name">test19</div>
+        <div class="expense-meta">案内人立替 ／ 対象5名 ／ 2026/5/25</div>
+        <div class="expense-meta">対象者：石垣、山田、たなか、石黒、あといり太郎</div>
+        
       </div>
+      <div class="expense-right">
+        <div>
+          <div class="expense-total">€1,000</div>
+          <div class="expense-per">1人 €200</div>
+        </div>
+        <div class="expense-actions">
+          <button class="btn-icon" onclick="openEdit(1779680697452)">✏️</button>
+          <button class="btn-icon danger" onclick="openDelete(1779680697452)">🗑️</button>
+        </div>
+      </div>
+    </div>
+    <div class="expense-item">
+      <div class="expense-icon">🍽️</div>
+      <div class="expense-info">
+        <div class="expense-name">テスト３</div>
+        <div class="expense-meta">案内人立替 ／ 対象1名 ／ 2026/5/25</div>
+        <div class="expense-meta">対象者：あといり太郎</div>
+        
+      </div>
+      <div class="expense-right">
+        <div>
+          <div class="expense-total">€100</div>
+          <div class="expense-per">1人 €100</div>
+        </div>
+        <div class="expense-actions">
+          <button class="btn-icon" onclick="openEdit(1779679700236)">✏️</button>
+          <button class="btn-icon danger" onclick="openDelete(1779679700236)">🗑️</button>
+        </div>
+      </div>
+    </div>
+    <div class="expense-item">
+      <div class="expense-icon">🏨</div>
+      <div class="expense-info">
+        <div class="expense-name">test7</div>
+        <div class="expense-meta">案内人立替 ／ 対象3名 ／ 2026/5/25</div>
+        <div class="expense-meta">対象者：石垣、たなか、石黒</div>
+        
+      </div>
+      <div class="expense-right">
+        <div>
+          <div class="expense-total">€11</div>
+          <div class="expense-per">1人 €4</div>
+        </div>
+        <div class="expense-actions">
+          <button class="btn-icon" onclick="openEdit(1779677845081)">✏️</button>
+          <button class="btn-icon danger" onclick="openDelete(1779677845081)">🗑️</button>
+        </div>
+      </div>
+    </div>
+    <div class="expense-item">
+      <div class="expense-icon">🏨</div>
+      <div class="expense-info">
+        <div class="expense-name">test9</div>
+        <div class="expense-meta">案内人立替 ／ 対象2名 ／ 2026/5/25</div>
+        <div class="expense-meta">対象者：山田、たなか</div>
+        <div class="expense-memo">📝 test5</div>
+      </div>
+      <div class="expense-right">
+        <div>
+          <div class="expense-total">€1,111</div>
+          <div class="expense-per">1人 €556</div>
+        </div>
+        <div class="expense-actions">
+          <button class="btn-icon" onclick="openEdit(1779677829248)">✏️</button>
+          <button class="btn-icon danger" onclick="openDelete(1779677829248)">🗑️</button>
+        </div>
+      </div>
+    </div>
+    <div class="expense-item">
+      <div class="expense-icon">🍽️</div>
+      <div class="expense-info">
+        <div class="expense-name">テスト３</div>
+        <div class="expense-meta">案内人立替 ／ 対象2名 ／ 2026/5/25</div>
+        <div class="expense-meta">対象者：山田、たなか</div>
+        
+      </div>
+      <div class="expense-right">
+        <div>
+          <div class="expense-total">€100</div>
+          <div class="expense-per">1人 €50</div>
+        </div>
+        <div class="expense-actions">
+          <button class="btn-icon" onclick="openEdit(1779677786448)">✏️</button>
+          <button class="btn-icon danger" onclick="openDelete(1779677786448)">🗑️</button>
+        </div>
+      </div>
+    </div>
+    <div class="expense-item">
+      <div class="expense-icon">🍽️</div>
+      <div class="expense-info">
+        <div class="expense-name">テスト５</div>
+        <div class="expense-meta">案内人立替 ／ 対象2名 ／ 2026/5/25</div>
+        <div class="expense-meta">対象者：石垣、山田</div>
+        
+      </div>
+      <div class="expense-right">
+        <div>
+          <div class="expense-total">€50</div>
+          <div class="expense-per">1人 €25</div>
+        </div>
+        <div class="expense-actions">
+          <button class="btn-icon" onclick="openEdit(1779674205241)">✏️</button>
+          <button class="btn-icon danger" onclick="openDelete(1779674205241)">🗑️</button>
+        </div>
+      </div>
+    </div>
+    <div class="expense-item">
+      <div class="expense-icon">🍽️</div>
+      <div class="expense-info">
+        <div class="expense-name">旅行代金</div>
+        <div class="expense-meta">案内人立替 ／ 対象4名 ／ 2026/5/25</div>
+        <div class="expense-meta">対象者：石垣、山田、たなか、石黒</div>
+        
+      </div>
+      <div class="expense-right">
+        <div>
+          <div class="expense-total">€46</div>
+          <div class="expense-per">1人 €11</div>
+        </div>
+        <div class="expense-actions">
+          <button class="btn-icon" onclick="openEdit(1779670932918)">✏️</button>
+          <button class="btn-icon danger" onclick="openDelete(1779670932918)">🗑️</button>
+        </div>
+      </div>
+    </div>
+    <div class="expense-item">
+      <div class="expense-icon">🍽️</div>
+      <div class="expense-info">
+        <div class="expense-name">テスト</div>
+        <div class="expense-meta">案内人立替 ／ 対象4名 ／ 2026/5/25</div>
+        <div class="expense-meta">対象者：石垣、山田、たなか、石黒</div>
+        <div class="expense-memo">📝 test</div>
+      </div>
+      <div class="expense-right">
+        <div>
+          <div class="expense-total">€1,000</div>
+          <div class="expense-per">1人 €250</div>
+        </div>
+        <div class="expense-actions">
+          <button class="btn-icon" onclick="openEdit(1779670909451)">✏️</button>
+          <button class="btn-icon danger" onclick="openDelete(1779670909451)">🗑️</button>
+        </div>
+      </div>
+    </div></div>
     </div>
 
     <!-- 精算 -->
     <div class="tab-content" id="tab-settlement">
-      <div class="csv-bar">
+      <div class="csv-bar" style="gap:8px;display:flex;justify-content:flex-end;flex-wrap:wrap;">
+        <button class="btn-csv" onclick="showShareModal()" style="background:var(--accent2);color:var(--earth);">🔗 参照用URLを発行</button>
         <button class="btn-csv" onclick="exportSettlementCSV()">📥 精算結果をCSV出力</button>
       </div>
       <div class="settlement-section">
         <div class="section-title">参加者ごとの支払い明細</div>
-        <div id="settlement-cards"></div>
+        <div id="settlement-cards"><div class="settlement-card"><div class="settlement-card-header"><div class="settlement-card-name"><span style="width:28px;height:28px;border-radius:50%;background:var(--sage);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700">石</span>石垣</div><div class="settlement-card-total">€515</div></div><div class="settlement-card-body"><div class="settlement-line"><span>費用負担分</span><span class="amt">€490</span></div><div class="expense-breakdown"><div class="expense-breakdown-item"><span class="b-name">立替1.&nbsp;テスト</span><span class="b-amt">€250</span></div><div class="expense-breakdown-item"><span class="b-name">立替2.&nbsp;旅行代金</span><span class="b-amt">€11</span></div><div class="expense-breakdown-item"><span class="b-name">立替3.&nbsp;テスト５</span><span class="b-amt">€25</span></div><div class="expense-breakdown-item"><span class="b-name">立替6.&nbsp;test7</span><span class="b-amt">€4</span></div><div class="expense-breakdown-item"><span class="b-name">立替8.&nbsp;test19</span><span class="b-amt">€200</span></div></div><div class="settlement-line fee"><span>決済・管理手数料（5%）</span><span class="amt">€25</span></div><div class="settlement-line total"><span>→ 案内人への支払合計</span><span class="amt">€515</span></div></div></div><div class="settlement-card"><div class="settlement-card-header"><div class="settlement-card-name"><span style="width:28px;height:28px;border-radius:50%;background:var(--sage);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700">山</span>山田</div><div class="settlement-card-total">€1,147</div></div><div class="settlement-card-body"><div class="settlement-line"><span>費用負担分</span><span class="amt">€1,092</span></div><div class="expense-breakdown"><div class="expense-breakdown-item"><span class="b-name">立替1.&nbsp;テスト</span><span class="b-amt">€250</span></div><div class="expense-breakdown-item"><span class="b-name">立替2.&nbsp;旅行代金</span><span class="b-amt">€11</span></div><div class="expense-breakdown-item"><span class="b-name">立替3.&nbsp;テスト５</span><span class="b-amt">€25</span></div><div class="expense-breakdown-item"><span class="b-name">立替4.&nbsp;テスト３</span><span class="b-amt">€50</span></div><div class="expense-breakdown-item"><span class="b-name">立替5.&nbsp;test9</span><span class="b-amt">€556</span></div><div class="expense-breakdown-item"><span class="b-name">立替8.&nbsp;test19</span><span class="b-amt">€200</span></div></div><div class="settlement-line fee"><span>決済・管理手数料（5%）</span><span class="amt">€55</span></div><div class="settlement-line total"><span>→ 案内人への支払合計</span><span class="amt">€1,147</span></div></div></div><div class="settlement-card"><div class="settlement-card-header"><div class="settlement-card-name"><span style="width:28px;height:28px;border-radius:50%;background:var(--sage);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700">た</span>たなか</div><div class="settlement-card-total">€1,125</div></div><div class="settlement-card-body"><div class="settlement-line"><span>費用負担分</span><span class="amt">€1,071</span></div><div class="expense-breakdown"><div class="expense-breakdown-item"><span class="b-name">立替1.&nbsp;テスト</span><span class="b-amt">€250</span></div><div class="expense-breakdown-item"><span class="b-name">立替2.&nbsp;旅行代金</span><span class="b-amt">€11</span></div><div class="expense-breakdown-item"><span class="b-name">立替4.&nbsp;テスト３</span><span class="b-amt">€50</span></div><div class="expense-breakdown-item"><span class="b-name">立替5.&nbsp;test9</span><span class="b-amt">€556</span></div><div class="expense-breakdown-item"><span class="b-name">立替6.&nbsp;test7</span><span class="b-amt">€4</span></div><div class="expense-breakdown-item"><span class="b-name">立替8.&nbsp;test19</span><span class="b-amt">€200</span></div></div><div class="settlement-line fee"><span>決済・管理手数料（5%）</span><span class="amt">€54</span></div><div class="settlement-line total"><span>→ 案内人への支払合計</span><span class="amt">€1,125</span></div></div></div><div class="settlement-card"><div class="settlement-card-header"><div class="settlement-card-name"><span style="width:28px;height:28px;border-radius:50%;background:var(--sage);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700">石</span>石黒</div><div class="settlement-card-total">€488</div></div><div class="settlement-card-body"><div class="settlement-line"><span>費用負担分</span><span class="amt">€465</span></div><div class="expense-breakdown"><div class="expense-breakdown-item"><span class="b-name">立替1.&nbsp;テスト</span><span class="b-amt">€250</span></div><div class="expense-breakdown-item"><span class="b-name">立替2.&nbsp;旅行代金</span><span class="b-amt">€11</span></div><div class="expense-breakdown-item"><span class="b-name">立替6.&nbsp;test7</span><span class="b-amt">€4</span></div><div class="expense-breakdown-item"><span class="b-name">立替8.&nbsp;test19</span><span class="b-amt">€200</span></div></div><div class="settlement-line fee"><span>決済・管理手数料（5%）</span><span class="amt">€23</span></div><div class="settlement-line total"><span>→ 案内人への支払合計</span><span class="amt">€488</span></div></div></div><div class="settlement-card"><div class="settlement-card-header"><div class="settlement-card-name"><span style="width:28px;height:28px;border-radius:50%;background:var(--sage);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700">あ</span>あといり太郎</div><div class="settlement-card-total">€315</div></div><div class="settlement-card-body"><div class="settlement-line"><span>費用負担分</span><span class="amt">€300</span></div><div class="expense-breakdown"><div class="expense-breakdown-item"><span class="b-name">立替7.&nbsp;テスト３</span><span class="b-amt">€100</span></div><div class="expense-breakdown-item"><span class="b-name">立替8.&nbsp;test19</span><span class="b-amt">€200</span></div></div><div class="settlement-line fee"><span>決済・管理手数料（5%）</span><span class="amt">€15</span></div><div class="settlement-line total"><span>→ 案内人への支払合計</span><span class="amt">€315</span></div></div></div></div>
       </div>
       <div class="settlement-section">
         <div class="section-title">案内人 受取サマリ</div>
-        <div class="tc-summary" id="tc-summary"></div>
+        <div class="tc-summary" id="tc-summary">
+    <div class="tc-summary-title">👑 田代（ルクタス旅ラン案内人）受取明細</div>
+    <div class="tc-summary-row"><span>立替合計</span><span class="amt">€3,418</span></div>
+    <div class="tc-summary-row"><span>手数料合計（5%）</span><span class="amt">€172</span></div>
+    <div class="tc-summary-row total"><span>受取総額</span><span class="amt">€3,590</span></div></div>
       </div>
     </div>
 
     <!-- メンバー -->
-    <div class="tab-content" id="tab-members">
+    <div class="tab-content active" id="tab-members">
       <div class="settlement-section">
         <div class="section-title">ツアーメンバー</div>
         <div class="member-card-list" id="member-card-list">
@@ -439,6 +622,64 @@
   </div>
 </div>
 
+
+<!-- ===== 参照専用画面 ===== -->
+<div id="view-screen">
+  <div class="view-mode-banner">
+    👁 <strong>参照モード</strong>　入力・編集はできません　ルクタスツアー参加者立替費用 精算管理システム
+  </div>
+  <header>
+    <div class="header-inner">
+      <div class="logo-img-wrap"><img src="file:///Users/tashiromuneo/Downloads/tour-split_14.html" alt="LUC+ Adventures" class="header-logo" id="view-header-logo"></div>
+      <div class="tour-badge" id="view-tour-badge"></div>
+    </div>
+  </header>
+  <div class="container">
+    <div class="summary-bar">
+      <div class="summary-card"><div class="summary-label">立替合計</div><div class="summary-value" id="view-total"></div></div>
+      <div class="summary-card"><div class="summary-label">手数料込み/人</div><div class="summary-value accent" id="view-per"></div></div>
+      <div class="summary-card"><div class="summary-label">件数</div><div class="summary-value green" id="view-count"></div></div>
+    </div>
+    <div class="view-tabs">
+      <button class="view-tab active" onclick="switchViewTab(&#39;settlement&#39;)">精算</button>
+      <button class="view-tab" onclick="switchViewTab(&#39;history&#39;)">立替履歴</button>
+      <button class="view-tab" onclick="switchViewTab(&#39;members&#39;)">メンバー</button>
+    </div>
+    <div class="view-tab-content active" id="vtab-settlement">
+      <div class="view-section">
+        <div class="view-section-title">参加者ごとの支払い明細</div>
+        <div id="view-settlement-cards"></div>
+      </div>
+      <div class="view-section">
+        <div class="view-section-title">案内人 受取サマリ</div>
+        <div class="tc-summary" id="view-tc-summary"></div>
+      </div>
+    </div>
+    <div class="view-tab-content" id="vtab-history">
+      <div class="expense-list" id="view-expense-list"></div>
+    </div>
+    <div class="view-tab-content" id="vtab-members">
+      <div class="view-section">
+        <div class="view-section-title">ツアーメンバー</div>
+        <div class="member-card-list" id="view-member-list"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 参照URLモーダル -->
+<div class="modal-overlay" id="share-modal">
+  <div class="modal">
+    <div class="modal-title">🔗 参照用URLを発行</div>
+    <p style="font-size:0.84rem;color:var(--stone);margin-bottom:10px">このURLを参加者にLINEなどで共有してください。現時点の精算状況が参照できます。</p>
+    <div class="share-url-box" id="share-url-box"></div>
+    <button class="btn-copy" onclick="copyShareUrl()">📋 URLをコピー</button>
+    <p class="copy-note">※ 立替内容を更新した場合は再度URLを発行してください<br>※ 参加者は入力・編集はできません</p>
+    <div class="modal-actions" style="margin-top:12px">
+      <button class="btn-cancel" onclick="closeModal(&#39;share-modal&#39;)">閉じる</button>
+    </div>
+  </div>
+</div>
 <!-- 記録完了モーダル -->
 <div class="modal-overlay" id="success-modal">
   <div class="modal success-modal">
@@ -761,6 +1002,25 @@ function confirmDelete() {
   closeModal('delete-modal');
 }
 
+
+// 参加者の立替明細行を生成（精算カード内）
+function buildBreakdownHTML(p, expenses, fmtFn) {
+  var items = [];
+  expenses.forEach(function(e, idx) {
+    if (e.targets.indexOf(p) !== -1) {
+      var share = Math.round(e.amount / e.targets.length);
+      items.push(
+        '<div class="expense-breakdown-item">' +
+          '<span class="b-name">立替' + (idx+1) + '.&nbsp;' + e.name + '</span>' +
+          '<span class="b-amt">' + fmtFn(share) + '</span>' +
+        '</div>'
+      );
+    }
+  });
+  if (!items.length) return '';
+  return '<div class="expense-breakdown">' + items.join('') + '</div>';
+}
+
 // ===== SETTLEMENT =====
 function renderSettlement() {
   const perMap = calcPerParticipant();
@@ -768,23 +1028,24 @@ function renderSettlement() {
   const totalFee    = Object.values(perMap).reduce((s,v)=>s+v.fee,     0);
   const totalWithFee= Object.values(perMap).reduce((s,v)=>s+v.withFee, 0);
 
-  document.getElementById('settlement-cards').innerHTML = state.participants.map(p => {
+  document.getElementById('settlement-cards').innerHTML = state.participants.map(function(p) {
     const d = perMap[p];
-    return `
-    <div class="settlement-card">
-      <div class="settlement-card-header">
-        <div class="settlement-card-name">
-          <span style="width:28px;height:28px;border-radius:50%;background:var(--sage);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700">${p[0]}</span>
-          ${p}
-        </div>
-        <div class="settlement-card-total">${fmt(d.withFee)}</div>
-      </div>
-      <div class="settlement-card-body">
-        <div class="settlement-line"><span>費用負担分</span><span class="amt">${fmt(d.base)}</span></div>
-        <div class="settlement-line fee"><span>決済・管理手数料（5%）</span><span class="amt">${fmt(d.fee)}</span></div>
-        <div class="settlement-line total"><span>→ 案内人への支払合計</span><span class="amt">${fmt(d.withFee)}</span></div>
-      </div>
-    </div>`;
+    const breakdown = buildBreakdownHTML(p, state.expenses, fmt);
+    return '<div class="settlement-card">' +
+      '<div class="settlement-card-header">' +
+        '<div class="settlement-card-name">' +
+          '<span style="width:28px;height:28px;border-radius:50%;background:var(--sage);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700">' + p[0] + '</span>' +
+          p +
+        '</div>' +
+        '<div class="settlement-card-total">' + fmt(d.withFee) + '</div>' +
+      '</div>' +
+      '<div class="settlement-card-body">' +
+        '<div class="settlement-line"><span>費用負担分</span><span class="amt">' + fmt(d.base) + '</span></div>' +
+        breakdown +
+        '<div class="settlement-line fee"><span>決済・管理手数料（5%）</span><span class="amt">' + fmt(d.fee) + '</span></div>' +
+        '<div class="settlement-line total"><span>→ 案内人への支払合計</span><span class="amt">' + fmt(d.withFee) + '</span></div>' +
+      '</div>' +
+    '</div>';
   }).join('');
 
   document.getElementById('tc-summary').innerHTML = `
@@ -898,6 +1159,181 @@ function addMemberMidTour() {
   alert('✔ ' + name + ' さんを追加しました');
 }
 
+
+// ===== 参照用URL発行 =====
+function showShareModal() {
+  if (!state.expenses.length) { alert('立替データがまだありません'); return; }
+  var now = new Date();
+  var updatedAt = now.getFullYear() + '年' +
+    (now.getMonth()+1) + '月' +
+    now.getDate() + '日' +
+    now.getHours().toString().padStart(2,'0') + ':' +
+    now.getMinutes().toString().padStart(2,'0') + '時';
+  const payload = {
+    t: state.tourName, g: state.guide,
+    p: state.participants, e: state.expenses,
+    c: state.currency, s: state.symbol,
+    updatedAt: updatedAt
+  };
+  const encoded = btoa(encodeURIComponent(JSON.stringify(payload)));
+  const url = location.href.split('#')[0] + '#view=' + encoded;
+  document.getElementById('share-url-box').textContent = url;
+  openModal('share-modal');
+}
+
+function copyShareUrl() {
+  const url = document.getElementById('share-url-box').textContent;
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(function() {
+      const btn = document.querySelector('.btn-copy');
+      btn.textContent = '✅ コピーしました！';
+      setTimeout(function() { btn.textContent = '📋 URLをコピー'; }, 2000);
+    });
+  } else {
+    // フォールバック
+    const ta = document.createElement('textarea');
+    ta.value = url; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+    const btn = document.querySelector('.btn-copy');
+    btn.textContent = '✅ コピーしました！';
+    setTimeout(function() { btn.textContent = '📋 URLをコピー'; }, 2000);
+  }
+}
+
+// ===== 参照モード描画 =====
+function launchViewMode(vstate) {
+  document.getElementById('setup-screen').style.display = 'none';
+  document.getElementById('app-screen').style.display = 'none';
+  document.getElementById('view-screen').style.display = 'block';
+
+  // ロゴ：メイン画面と同じsrcを使う
+  var mainLogo = document.querySelector('.header-logo');
+  if (mainLogo) document.getElementById('view-header-logo').src = mainLogo.src;
+
+  document.getElementById('view-tour-badge').textContent = vstate.t;
+
+  // 更新日時バッジ
+  var existingBadge = document.getElementById('view-updated-badge');
+  if (!existingBadge) {
+    var badge = document.createElement('div');
+    badge.id = 'view-updated-badge';
+    badge.className = 'view-updated-badge';
+    var summaryBar = document.querySelector('#view-screen .summary-bar');
+    summaryBar.parentNode.insertBefore(badge, summaryBar);
+  }
+  var updatedLabel = vstate.updatedAt ? vstate.updatedAt : '不明';
+  document.getElementById('view-updated-badge').innerHTML =
+    '<strong>' + updatedLabel + '</strong>　更新　精算記録';
+
+  // サマリ
+  var total = vstate.e.reduce(function(s,e){ return s+e.amount; }, 0);
+  var perMap = calcViewPerParticipant(vstate);
+  var grandTotal = Object.values(perMap).reduce(function(s,v){ return s+v.withFee; }, 0);
+  var avg = vstate.p.length > 0 ? Math.round(grandTotal / vstate.p.length) : 0;
+  document.getElementById('view-total').textContent = vstate.s + total.toLocaleString();
+  document.getElementById('view-per').textContent = vstate.s + avg.toLocaleString();
+  document.getElementById('view-count').textContent = vstate.e.length + '件';
+
+  // 精算カード
+  var totalBase = 0, totalFee = 0, totalWithFee = 0;
+  var vFmt = function(n) { return vstate.s + Math.round(n).toLocaleString(); };
+  document.getElementById('view-settlement-cards').innerHTML = vstate.p.map(function(p) {
+    var d = perMap[p];
+    totalBase += d.base; totalFee += d.fee; totalWithFee += d.withFee;
+    var breakdown = buildBreakdownHTML(p, vstate.e, vFmt);
+    return '<div class="settlement-card">' +
+      '<div class="settlement-card-header">' +
+        '<div class="settlement-card-name">' +
+          '<span style="width:28px;height:28px;border-radius:50%;background:var(--sage);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:0.78rem;font-weight:700">' + p[0] + '</span>' +
+          p +
+        '</div>' +
+        '<div class="settlement-card-total">' + vFmt(d.withFee) + '</div>' +
+      '</div>' +
+      '<div class="settlement-card-body">' +
+        '<div class="settlement-line"><span>費用負担分</span><span class="amt">' + vFmt(d.base) + '</span></div>' +
+        breakdown +
+        '<div class="settlement-line fee"><span>決済・管理手数料（5%）</span><span class="amt">' + vFmt(d.fee) + '</span></div>' +
+        '<div class="settlement-line total"><span>→ 案内人への支払合計</span><span class="amt">' + vFmt(d.withFee) + '</span></div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  // TC受取サマリ
+  document.getElementById('view-tc-summary').innerHTML =
+    '<div class="tc-summary-title">👑 ' + vstate.g + '（ルクタス旅ラン案内人）受取明細</div>' +
+    '<div class="tc-summary-row"><span>立替合計</span><span class="amt">' + vstate.s + totalBase.toLocaleString() + '</span></div>' +
+    '<div class="tc-summary-row"><span>手数料合計（5%）</span><span class="amt">' + vstate.s + totalFee.toLocaleString() + '</span></div>' +
+    '<div class="tc-summary-row total"><span>受取総額</span><span class="amt">' + vstate.s + totalWithFee.toLocaleString() + '</span></div>';
+
+  // 履歴
+  var histHTML = vstate.e.length === 0
+    ? '<div class="empty-state"><div class="icon">📋</div>まだ立替が記録されていません</div>'
+    : vstate.e.slice().reverse().map(function(e) {
+        var perHead = Math.round(e.amount / e.targets.length);
+        return '<div class="expense-item">' +
+          '<div class="expense-icon">' + e.cat.split(' ')[0] + '</div>' +
+          '<div class="expense-info">' +
+            '<div class="expense-name">' + e.name + '</div>' +
+            '<div class="expense-meta">案内人立替 ／ 対象' + e.targets.length + '名 ／ ' + e.date + '</div>' +
+            '<div class="expense-meta">対象者：' + e.targets.join('、') + '</div>' +
+            (e.memo ? '<div class="expense-memo">📝 ' + e.memo + '</div>' : '') +
+          '</div>' +
+          '<div class="expense-right">' +
+            '<div class="expense-total">' + vstate.s + e.amount.toLocaleString() + '</div>' +
+            '<div class="expense-per">1人 ' + vstate.s + perHead.toLocaleString() + '</div>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+  document.getElementById('view-expense-list').innerHTML = histHTML;
+
+  // メンバー
+  var guideCard = '<div class="member-card"><div class="member-avatar guide">' + vstate.g[0] + '</div><div class="member-card-name">' + vstate.g + '</div><div class="member-card-role-tag guide">ルクタス旅ラン案内人</div></div>';
+  var pCards = vstate.p.map(function(p) {
+    return '<div class="member-card"><div class="member-avatar participant">' + p[0] + '</div><div class="member-card-name">' + p + '</div><div class="member-card-role-tag participant">参加者</div></div>';
+  }).join('');
+  document.getElementById('view-member-list').innerHTML = guideCard + pCards;
+}
+
+function calcViewPerParticipant(vstate) {
+  var map = {};
+  vstate.p.forEach(function(p) { map[p] = { base:0, fee:0, withFee:0 }; });
+  vstate.e.forEach(function(e) {
+    var share = e.amount / e.targets.length;
+    e.targets.forEach(function(p) { if (map[p] !== undefined) map[p].base += share; });
+  });
+  vstate.p.forEach(function(p) {
+    map[p].base = Math.round(map[p].base);
+    map[p].fee = Math.round(map[p].base * 0.05);
+    map[p].withFee = map[p].base + map[p].fee;
+  });
+  return map;
+}
+
+function switchViewTab(name) {
+  var names = ['settlement','history','members'];
+  document.querySelectorAll('.view-tab').forEach(function(t,i) {
+    t.classList.toggle('active', names[i] === name);
+  });
+  document.querySelectorAll('.view-tab-content').forEach(function(c) { c.classList.remove('active'); });
+  document.getElementById('vtab-' + name).classList.add('active');
+}
+
+// ===== ハッシュから参照モード判定 =====
+function checkViewMode() {
+  var hash = location.hash;
+  if (hash && hash.indexOf('#view=') === 0) {
+    try {
+      var encoded = hash.slice(6);
+      var vstate = JSON.parse(decodeURIComponent(atob(encoded)));
+      launchViewMode(vstate);
+      return true;
+    } catch(err) {
+      console.error('参照URLの解析に失敗しました', err);
+    }
+  }
+  return false;
+}
+
 // ===== MODAL =====
 function openModal(id)  { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
@@ -907,7 +1343,9 @@ document.querySelectorAll('.modal-overlay').forEach(el => {
 
 // ===== INIT =====
 updateCurrencyPreview();
-if (loadState()) { launchApp(); }
+if (!checkViewMode()) {
+  if (loadState()) { launchApp(); }
+}
 </script>
 
 
