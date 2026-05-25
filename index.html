@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)file:///Users/tashiromuneo/Downloads/tour-split_5.html -->
+<!-- saved from url=(0054)file:///Users/tashiromuneo/Downloads/tour-split_6.html -->
 <html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -330,16 +330,16 @@
           <button class="split-option" id="btn-split-custom" onclick="selectCustom()">カスタム選択</button>
         </div>
         <div class="participant-check-list" id="participant-checks" style="display:none">
-    <div class="participant-check selected" data-p="石垣">
+    <div class="participant-check selected" data-p="石垣" onclick="toggleParticipant(this)">
       <span class="check-dot"></span>石垣
     </div>
-    <div class="participant-check selected" data-p="山田">
+    <div class="participant-check selected" data-p="山田" onclick="toggleParticipant(this)">
       <span class="check-dot"></span>山田
     </div>
-    <div class="participant-check selected" data-p="たなか">
+    <div class="participant-check selected" data-p="たなか" onclick="toggleParticipant(this)">
       <span class="check-dot"></span>たなか
     </div>
-    <div class="participant-check selected" data-p="石黒">
+    <div class="participant-check selected" data-p="石黒" onclick="toggleParticipant(this)">
       <span class="check-dot"></span>石黒
     </div></div>
         <div id="split-all-label" style="font-size:0.76rem;color:var(--stone);margin-top:6px">対象：石垣、山田、たなか、石黒</div>
@@ -569,20 +569,12 @@ function switchTab(name) {
 function renderParticipantChecks() {
   const container = document.getElementById('participant-checks');
   container.innerHTML = state.participants.map(p => `
-    <div class="participant-check selected" data-p="${p}">
+    <div class="participant-check selected" data-p="${p}" onclick="toggleParticipant(this)">
       <span class="check-dot"></span>${p}
     </div>`).join('');
-  container.querySelectorAll('.participant-check').forEach(el => {
-    el.addEventListener('click', function(e) {
-      e.stopPropagation();
-      this.classList.toggle('selected');
-    });
-    // スマホのタッチ対応
-    el.addEventListener('touchend', function(e) {
-      e.preventDefault();
-      this.classList.toggle('selected');
-    });
-  });
+}
+function toggleParticipant(el) {
+  el.classList.toggle('selected');
 }
 function selectAll() {
   state.splitAll = true;
