@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)file:///Users/tashiromuneo/Downloads/tour-split_3.html -->
+<!-- saved from url=(0054)file:///Users/tashiromuneo/Downloads/tour-split_5.html -->
 <html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ルクタス・ツアー立替システム</title>
-<link href="./index_files/css2" rel="stylesheet">
+<link href="./ルクタス・ツアー立替システム_files/css2" rel="stylesheet">
 <style>
   :root {
     --earth: #2C2416; --moss: #3D5A3E; --sage: #6B8F71; --stone: #8C7B6B;
@@ -95,6 +95,7 @@
     border-radius: 20px; border: 2px solid var(--sand); cursor: pointer;
     font-size: 0.82rem; transition: all 0.18s; user-select: none;
     background: var(--white); color: var(--stone); font-weight: 500;
+    -webkit-tap-highlight-color: transparent; touch-action: manipulation;
   }
   .participant-check:hover { border-color: var(--sage); color: var(--earth); }
   .participant-check.selected {
@@ -104,6 +105,7 @@
   .participant-check .check-dot {
     width: 14px; height: 14px; border-radius: 50%; border: 2px solid currentColor;
     display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 0.6rem;
+    pointer-events: none;
   }
   .participant-check.selected .check-dot { background: rgba(255,255,255,0.3); border-color: rgba(255,255,255,0.7); }
   .participant-check.selected .check-dot::after { content: '✓'; color: #fff; font-size: 0.65rem; line-height: 1; }
@@ -281,15 +283,15 @@
     <div class="summary-bar">
       <div class="summary-card">
         <div class="summary-label">立替合計</div>
-        <div class="summary-value" id="total-amount">€1,046</div>
+        <div class="summary-value" id="total-amount">€1,096</div>
       </div>
       <div class="summary-card">
         <div class="summary-label">手数料込み/人</div>
-        <div class="summary-value accent" id="per-person">€274</div>
+        <div class="summary-value accent" id="per-person">€287</div>
       </div>
       <div class="summary-card">
         <div class="summary-label">件数</div>
-        <div class="summary-value green" id="expense-count">2件</div>
+        <div class="summary-value green" id="expense-count">3件</div>
       </div>
     </div>
 
@@ -571,7 +573,15 @@ function renderParticipantChecks() {
       <span class="check-dot"></span>${p}
     </div>`).join('');
   container.querySelectorAll('.participant-check').forEach(el => {
-    el.addEventListener('click', () => el.classList.toggle('selected'));
+    el.addEventListener('click', function(e) {
+      e.stopPropagation();
+      this.classList.toggle('selected');
+    });
+    // スマホのタッチ対応
+    el.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      this.classList.toggle('selected');
+    });
   });
 }
 function selectAll() {
